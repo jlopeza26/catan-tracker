@@ -560,62 +560,62 @@
         const SUPABASE_URL = 'https://fqgljucopdlftxgtohze.supabase.co/rest/v1/';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxZ2xqdWNvcGRsZnR4Z3RvaHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjMsImV4cCI6MjEwNTM4OTQ2M30.dc_deOFycpwu8HTLmmZQOVFrz-BXISmmk0R34mesRMY';
         // Default Mock Data in case LocalStorage is empty
-        const initialMockData = {
-            players: [
-                { id: "p1", name: "Carlos", avatarColor: "bg-amber-500" },
-                { id: "p2", name: "Sofía", avatarColor: "bg-red-500" },
-                { id: "p3", name: "Mateo", avatarColor: "bg-blue-500" },
-                { id: "p4", name: "Elena", avatarColor: "bg-emerald-500" }
-            ],
-            games: [
-                {
-                    id: "g1",
-                    date: "2026-03-10",
-                    location: "Casa de Sofía - Tarde de Domingo",
-                    expansions: ["Juego Base"],
-                    duration: 75,
-                    photoUrl: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80",
-                    notes: "Carlos monopolizó el trigo al final y ganó con un poblado sorpresa.",
-                    results: [
-                        { playerId: "p1", points: 10, hadRoad: true, hadArmy: false, isWinner: true },
-                        { playerId: "p2", points: 8, hadRoad: false, hadArmy: true, isWinner: false },
-                        { playerId: "p3", points: 7, hadRoad: false, hadArmy: false, isWinner: false },
-                        { playerId: "p4", points: 5, hadRoad: false, hadArmy: false, isWinner: false }
-                    ]
-                },
-                {
-                    id: "g2",
-                    date: "2026-03-14",
-                    location: "Cabaña de Fin de Semana",
-                    expansions: ["Juego Base", "Navegantes"],
-                    duration: 95,
-                    photoUrl: "https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&w=800&q=80",
-                    notes: "Partida épica con piratas. Elena dominó las islas marítimas.",
-                    results: [
-                        { playerId: "p4", points: 11, hadRoad: true, hadArmy: false, isWinner: true },
-                        { playerId: "p1", points: 9, hadRoad: false, hadArmy: true, isWinner: false },
-                        { playerId: "p2", points: 9, hadRoad: false, hadArmy: false, isWinner: false },
-                        { playerId: "p3", points: 6, hadRoad: false, hadArmy: false, isWinner: false }
-                    ]
-                },
-                {
-                    id: "g3",
-                    date: "2026-03-18",
-                    location: "Club de Juegos",
-                    expansions: ["Juego Base", "Ciudades y Caballeros"],
-                    duration: 110,
-                    photoUrl: "",
-                    notes: "Sofía construyó la metrópolis temprano y mantuvo la ventaja.",
-                    results: [
-                        { playerId: "p2", points: 13, hadRoad: false, hadArmy: true, isWinner: true },
-                        { playerId: "p3", points: 10, hadRoad: true, hadArmy: false, isWinner: false },
-                        { playerId: "p1", points: 8, hadRoad: false, hadArmy: false, isWinner: false },
-                        { playerId: "p4", points: 7, hadRoad: false, hadArmy: false, isWinner: false }
-                    ]
-                }
-            ],
-            diceStats: { 2: 2, 3: 5, 4: 8, 5: 12, 6: 18, 7: 22, 8: 17, 9: 11, 10: 7, 11: 4, 12: 1 }
-        };
+        // const initialMockData = {
+        //     players: [
+        //         { id: "p1", name: "Carlos", avatarColor: "bg-amber-500" },
+        //         { id: "p2", name: "Sofía", avatarColor: "bg-red-500" },
+        //         { id: "p3", name: "Mateo", avatarColor: "bg-blue-500" },
+        //         { id: "p4", name: "Elena", avatarColor: "bg-emerald-500" }
+        //     ],
+        //     games: [
+        //         {
+        //             id: "g1",
+        //             date: "2026-03-10",
+        //             location: "Casa de Sofía - Tarde de Domingo",
+        //             expansions: ["Juego Base"],
+        //             duration: 75,
+        //             photoUrl: "https://images.unsplash.com/photo-1610890716171-6b1bb98ffd09?auto=format&fit=crop&w=800&q=80",
+        //             notes: "Carlos monopolizó el trigo al final y ganó con un poblado sorpresa.",
+        //             results: [
+        //                 { playerId: "p1", points: 10, hadRoad: true, hadArmy: false, isWinner: true },
+        //                 { playerId: "p2", points: 8, hadRoad: false, hadArmy: true, isWinner: false },
+        //                 { playerId: "p3", points: 7, hadRoad: false, hadArmy: false, isWinner: false },
+        //                 { playerId: "p4", points: 5, hadRoad: false, hadArmy: false, isWinner: false }
+        //             ]
+        //         },
+        //         {
+        //             id: "g2",
+        //             date: "2026-03-14",
+        //             location: "Cabaña de Fin de Semana",
+        //             expansions: ["Juego Base", "Navegantes"],
+        //             duration: 95,
+        //             photoUrl: "https://images.unsplash.com/photo-1606167668584-78701c57f13d?auto=format&fit=crop&w=800&q=80",
+        //             notes: "Partida épica con piratas. Elena dominó las islas marítimas.",
+        //             results: [
+        //                 { playerId: "p4", points: 11, hadRoad: true, hadArmy: false, isWinner: true },
+        //                 { playerId: "p1", points: 9, hadRoad: false, hadArmy: true, isWinner: false },
+        //                 { playerId: "p2", points: 9, hadRoad: false, hadArmy: false, isWinner: false },
+        //                 { playerId: "p3", points: 6, hadRoad: false, hadArmy: false, isWinner: false }
+        //             ]
+        //         },
+        //         {
+        //             id: "g3",
+        //             date: "2026-03-18",
+        //             location: "Club de Juegos",
+        //             expansions: ["Juego Base", "Ciudades y Caballeros"],
+        //             duration: 110,
+        //             photoUrl: "",
+        //             notes: "Sofía construyó la metrópolis temprano y mantuvo la ventaja.",
+        //             results: [
+        //                 { playerId: "p2", points: 13, hadRoad: false, hadArmy: true, isWinner: true },
+        //                 { playerId: "p3", points: 10, hadRoad: true, hadArmy: false, isWinner: false },
+        //                 { playerId: "p1", points: 8, hadRoad: false, hadArmy: false, isWinner: false },
+        //                 { playerId: "p4", points: 7, hadRoad: false, hadArmy: false, isWinner: false }
+        //             ]
+        //         }
+        //     ],
+        //     diceStats: { 2: 2, 3: 5, 4: 8, 5: 12, 6: 18, 7: 22, 8: 17, 9: 11, 10: 7, 11: 4, 12: 1 }
+        // };
 
         // Achievements definition list
         const achievementsList = [
@@ -643,32 +643,32 @@
             setupDefaultGameForm();
         };
 
-        function loadLocalStorage() {
-            const saved = localStorage.getItem('catan_tracker_data');
-            if (saved) {
-                try {
-                    appState = JSON.parse(saved);
-                } catch(e) {
-                    appState = initialMockData;
-                }
-            } else {
-                appState = JSON.parse(JSON.stringify(initialMockData));
-                saveLocalStorage();
-            }
-        }
+        // function loadLocalStorage() {
+        //     const saved = localStorage.getItem('catan_tracker_data');
+        //     if (saved) {
+        //         try {
+        //             appState = JSON.parse(saved);
+        //         } catch(e) {
+        //             appState = initialMockData;
+        //         }
+        //     } else {
+        //         appState = JSON.parse(JSON.stringify(initialMockData));
+        //         saveLocalStorage();
+        //     }
+        // }
 
-        function saveLocalStorage() {
-            localStorage.setItem('catan_tracker_data', JSON.stringify(appState));
-        }
+        // function saveLocalStorage() {
+        //     localStorage.setItem('catan_tracker_data', JSON.stringify(appState));
+        // }
 
-        function resetDataModal() {
-            if(confirm("¿Estás seguro de que quieres reiniciar las partidas a los datos de prueba iniciales?")) {
-                appState = JSON.parse(JSON.stringify(initialMockData));
-                saveLocalStorage();
-                renderAllViews();
-                showToast("Datos reiniciados correctamente", "success");
-            }
-        }
+        // function resetDataModal() {
+        //     if(confirm("¿Estás seguro de que quieres reiniciar las partidas a los datos de prueba iniciales?")) {
+        //         appState = JSON.parse(JSON.stringify(initialMockData));
+        //         saveLocalStorage();
+        //         renderAllViews();
+        //         showToast("Datos reiniciados correctamente", "success");
+        //     }
+        // }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
