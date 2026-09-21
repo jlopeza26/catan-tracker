@@ -558,10 +558,6 @@
     </footer>
 
     <script>
-<<<<<<< HEAD
-        // API Keys and Constants
-        const SUPABASE_URL = 'https://fqgljucopdlftxgtohze.supabase.co/rest/v1/';
-        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxZ2xqdWNvcGRsZnR4Z3RvaHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjMsImV4cCI6MjEwNTM4OTQ2M30.dc_deOFycpwu8HTLmmZQOVFrz-BXISmmk0R34mesRMY';
         // Default Mock Data in case LocalStorage is empty
         // const initialMockData = {
         //     players: [
@@ -619,11 +615,10 @@
         //     ],
         //     diceStats: { 2: 2, 3: 5, 4: 8, 5: 12, 6: 18, 7: 22, 8: 17, 9: 11, 10: 7, 11: 4, 12: 1 }
         // };
-=======
+        
         // Inicialización del cliente Supabase
         const cleanSupabaseUrl = SUPABASE_URL.replace(/\/rest\/v1\/?$/, '');
         const supabaseClient = supabase.createClient(cleanSupabaseUrl, SUPABASE_KEY);
->>>>>>> 185fda7 (Añadido conexión a bd)
 
         // Achievements definition list
         const achievementsList = [
@@ -649,7 +644,6 @@
             initDiceChart();
         };
 
-<<<<<<< HEAD
         // function loadLocalStorage() {
         //     const saved = localStorage.getItem('catan_tracker_data');
         //     if (saved) {
@@ -676,7 +670,7 @@
         //         showToast("Datos reiniciados correctamente", "success");
         //     }
         // }
-=======
+
         // Cargar datos reales desde la BD Supabase
         async function loadSupabaseData() {
             try {
@@ -767,7 +761,6 @@
             showToast("Recargando datos desde Supabase...", "info");
             loadSupabaseData();
         }
->>>>>>> 185fda7 (Añadido conexión a bd)
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
