@@ -12,6 +12,12 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Font Inter -->
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- API Keys and Constants -->
+    <script>
+        const SUPABASE_URL = 'https://fqgljucopdlftxgtohze.supabase.co';
+        const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxZ2xqdWNvcGRsZnR4Z3RvaHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjMsImV4cCI6MjEwNTM4OTQ2M30.dc_deOFycpwu8HTLmmZQOVFrz-BXISmmk0R34mesRMY';
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     
     <script>
         tailwind.config = {
@@ -110,7 +116,7 @@
 
                 <!-- Quick Action Header Right -->
                 <div class="flex items-center gap-2">
-                    <button onclick="resetDataModal()" title="Reiniciar Datos de Prueba" class="p-2 text-xs text-slate-400 hover:text-red-400 hover:bg-slate-800 rounded-lg transition-colors">
+                    <button onclick="resetDataModal()" title="Recargar Datos de Supabase" class="p-2 text-xs text-slate-400 hover:text-amber-400 hover:bg-slate-800 rounded-lg transition-colors">
                         <i class="fa-solid fa-rotate-right"></i>
                     </button>
                 </div>
@@ -271,7 +277,7 @@
                             </button>
                         </div>
                         <p class="text-xs text-slate-400">
-                            Nota: Quien tenga más puntos será marcado automáticamente como ganador. En caso de empate a 10+, selecciona o ajusta los puntos.
+                            Nota: Quien tenga más puntos será marcado automáticamente como ganador en la base de datos.
                         </p>
 
                         <div id="player-inputs-container" class="space-y-3">
@@ -311,7 +317,7 @@
                     <!-- Submit Button -->
                     <div class="pt-2">
                         <button type="submit" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-600 hover:to-amber-700 text-slate-950 font-bold text-base rounded-xl shadow-lg shadow-amber-500/20 transition-all duration-200 flex items-center justify-center gap-2">
-                            <i class="fa-solid fa-floppy-disk"></i> Guardar Partida en el Historial
+                            <i class="fa-solid fa-floppy-disk"></i> Guardar Partida en Supabase
                         </button>
                     </div>
                 </form>
@@ -461,10 +467,6 @@
                 <div class="mb-8">
                     <label class="block text-xs font-semibold text-slate-300 uppercase tracking-wider mb-3">Tocar un número para registrar tirada:</label>
                     <div class="grid grid-cols-4 sm:grid-cols-11 gap-2">
-                        <!-- Numbers 2 to 12 -->
-                        <script>
-                            // Inline generation for dice increment buttons
-                        </script>
                         <button onclick="registerDiceRoll(2)" class="p-3 bg-slate-900 hover:bg-amber-500 hover:text-slate-950 border border-slate-700 rounded-xl flex flex-col items-center justify-center transition-all group">
                             <span class="font-display font-extrabold text-lg group-hover:scale-110 transition-transform">2</span>
                             <span id="dice-cnt-2" class="text-xs text-slate-500 group-hover:text-slate-900">0</span>
@@ -556,6 +558,7 @@
     </footer>
 
     <script>
+<<<<<<< HEAD
         // API Keys and Constants
         const SUPABASE_URL = 'https://fqgljucopdlftxgtohze.supabase.co/rest/v1/';
         const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImZxZ2xqdWNvcGRsZnR4Z3RvaHplIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODk4MTM0NjMsImV4cCI6MjEwNTM4OTQ2M30.dc_deOFycpwu8HTLmmZQOVFrz-BXISmmk0R34mesRMY';
@@ -616,6 +619,11 @@
         //     ],
         //     diceStats: { 2: 2, 3: 5, 4: 8, 5: 12, 6: 18, 7: 22, 8: 17, 9: 11, 10: 7, 11: 4, 12: 1 }
         // };
+=======
+        // Inicialización del cliente Supabase
+        const cleanSupabaseUrl = SUPABASE_URL.replace(/\/rest\/v1\/?$/, '');
+        const supabaseClient = supabase.createClient(cleanSupabaseUrl, SUPABASE_KEY);
+>>>>>>> 185fda7 (Añadido conexión a bd)
 
         // Achievements definition list
         const achievementsList = [
@@ -631,18 +639,17 @@
         let appState = {
             players: [],
             games: [],
-            diceStats: {}
+            diceStats: { 2: 0, 3: 0, 4: 0, 5: 0, 6: 0, 7: 0, 8: 0, 9: 0, 10: 0, 11: 0, 12: 0 }
         };
 
         let diceChartInstance = null;
 
         window.onload = function() {
-            loadLocalStorage();
-            renderAllViews();
+            loadSupabaseData();
             initDiceChart();
-            setupDefaultGameForm();
         };
 
+<<<<<<< HEAD
         // function loadLocalStorage() {
         //     const saved = localStorage.getItem('catan_tracker_data');
         //     if (saved) {
@@ -669,6 +676,98 @@
         //         showToast("Datos reiniciados correctamente", "success");
         //     }
         // }
+=======
+        // Cargar datos reales desde la BD Supabase
+        async function loadSupabaseData() {
+            try {
+                // 1. Obtener Jugadores
+                const { data: playersData, error: pErr } = await supabaseClient
+                    .from('players')
+                    .select('*')
+                    .order('name', { ascending: true });
+
+                if (pErr) throw pErr;
+
+                const avatarColors = ['bg-amber-500', 'bg-red-500', 'bg-blue-500', 'bg-emerald-500', 'bg-purple-500', 'bg-pink-500'];
+                appState.players = (playersData || []).map((p, idx) => ({
+                    id: p.id,
+                    name: p.name,
+                    avatarColor: avatarColors[idx % avatarColors.length]
+                }));
+
+                // 2. Obtener Historial de Partidas con sus Jugadores
+                const { data: gamesData, error: gErr } = await supabaseClient
+                    .from('games')
+                    .select(`
+                        id,
+                        played_at,
+                        duration_minutes,
+                        expansion,
+                        board_photo_url,
+                        notes,
+                        game_players (
+                            id,
+                            player_id,
+                            victory_points,
+                            is_winner,
+                            has_longest_road,
+                            has_largest_army
+                        )
+                    `)
+                    .order('played_at', { ascending: false });
+
+                if (gErr) throw gErr;
+
+                appState.games = (gamesData || []).map(g => {
+                    let loc = "Partida Regular";
+                    let noteText = g.notes || "";
+                    if (g.notes && g.notes.includes(" | ")) {
+                        const parts = g.notes.split(" | ");
+                        loc = parts[0];
+                        noteText = parts.slice(1).join(" | ");
+                    } else if (g.notes) {
+                        loc = g.notes;
+                    }
+
+                    const expList = g.expansion ? g.expansion.split(', ') : ['Juego Base'];
+
+                    return {
+                        id: g.id,
+                        date: g.played_at ? g.played_at.split('T')[0] : new Date().toISOString().split('T')[0],
+                        location: loc,
+                        expansions: expList,
+                        duration: g.duration_minutes || 60,
+                        photoUrl: g.board_photo_url || "",
+                        notes: noteText,
+                        results: (g.game_players || []).map(gp => ({
+                            playerId: gp.player_id,
+                            points: gp.victory_points,
+                            hadRoad: gp.has_longest_road,
+                            hadArmy: gp.has_largest_army,
+                            isWinner: gp.is_winner
+                        }))
+                    };
+                });
+
+                // Cargar estadísticas de dados locales
+                const savedDice = localStorage.getItem('catan_dice_stats');
+                if (savedDice) {
+                    try { appState.diceStats = JSON.parse(savedDice); } catch(e) {}
+                }
+
+                renderAllViews();
+                setupDefaultGameForm();
+            } catch (err) {
+                console.error("Error al cargar desde Supabase:", err);
+                showToast("Error al conectar con Supabase: " + err.message, "error");
+            }
+        }
+
+        function resetDataModal() {
+            showToast("Recargando datos desde Supabase...", "info");
+            loadSupabaseData();
+        }
+>>>>>>> 185fda7 (Añadido conexión a bd)
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
@@ -692,7 +791,6 @@
                 activeMob.className = 'mob-btn flex flex-col items-center gap-1 p-2 text-amber-400 font-medium';
             }
 
-            // Tab specific refreshes
             if(tabId === 'rivalry') renderRivalryComparison();
             if(tabId === 'dice' && diceChartInstance) updateDiceChart();
         }
@@ -700,7 +798,6 @@
         function computePlayerStats() {
             const stats = {};
 
-            // Initialize stats for each known player
             appState.players.forEach(p => {
                 stats[p.id] = {
                     id: p.id,
@@ -716,11 +813,9 @@
                 };
             });
 
-            // Calculate from games feed
             appState.games.forEach(g => {
                 g.results.forEach(r => {
                     if (!stats[r.playerId]) {
-                        // In case a player is in games but missing in players list
                         stats[r.playerId] = {
                             id: r.playerId,
                             name: "Jugador " + r.playerId,
@@ -740,14 +835,12 @@
                 });
             });
 
-            // Convert to array and add percentages / averages
             const list = Object.values(stats).map(s => {
                 const winRate = s.totalGames > 0 ? ((s.wins / s.totalGames) * 100).toFixed(1) : 0;
                 const avgPoints = s.totalGames > 0 ? (s.totalPoints / s.totalGames).toFixed(1) : 0;
                 return { ...s, winRate: Number(winRate), avgPoints: Number(avgPoints) };
             });
 
-            // Sort by Wins desc, WinRate desc, Total Points desc
             list.sort((a, b) => b.wins - a.wins || b.winRate - a.winRate || b.totalPoints - a.totalPoints);
             return list;
         }
@@ -755,16 +848,14 @@
         function renderLeaderboard() {
             const playerStats = computePlayerStats();
 
-            // Header summary counts
             document.getElementById('total-games-stat').innerText = appState.games.length;
             document.getElementById('total-players-stat').innerText = playerStats.length;
 
-            // Render Podium (Top 3)
             const podiumContainer = document.getElementById('podium-container');
             podiumContainer.innerHTML = '';
 
             const top3 = playerStats.slice(0, 3);
-            const podiumOrder = [1, 0, 2]; // Center top 1, left 2, right 3
+            const podiumOrder = [1, 0, 2];
 
             podiumOrder.forEach(idx => {
                 const p = top3[idx];
@@ -795,7 +886,6 @@
                 podiumContainer.innerHTML += cardHtml;
             });
 
-            // Render Full Leaderboard Rows
             const tbody = document.getElementById('leaderboard-body');
             tbody.innerHTML = '';
 
@@ -836,29 +926,29 @@
         }
 
         function setupDefaultGameForm() {
-            // Set default date to today
             const today = new Date().toISOString().split('T')[0];
-            document.getElementById('game-date').value = today;
+            const gameDate = document.getElementById('game-date');
+            if (gameDate) gameDate.value = today;
 
-            // Pre-populate 4 player rows
             const container = document.getElementById('player-inputs-container');
-            container.innerHTML = '';
-            
-            // Add initial 4 player entries
-            for(let i = 0; i < 4; i++) {
-                addPlayerRow(appState.players[i] ? appState.players[i].id : '');
+            if (container) {
+                container.innerHTML = '';
+                const count = Math.max(4, appState.players.length > 0 ? Math.min(appState.players.length, 4) : 4);
+                for(let i = 0; i < count; i++) {
+                    addPlayerRow(appState.players[i] ? appState.players[i].id : '');
+                }
             }
         }
 
         function addPlayerRow(selectedPlayerId = '') {
             const container = document.getElementById('player-inputs-container');
+            if (!container) return;
             const rowId = 'player-row-' + Date.now() + '-' + Math.random().toString(36).substr(2, 4);
 
             const row = document.createElement('div');
             row.className = "player-input-row grid grid-cols-12 gap-2 items-center bg-slate-900/80 p-3 rounded-xl border border-slate-800";
             row.id = rowId;
 
-            // Build player options
             let optionsHtml = '<option value="">-- Seleccionar o Nuevo --</option>';
             appState.players.forEach(p => {
                 optionsHtml += `<option value="${p.id}" ${p.id === selectedPlayerId ? 'selected' : ''}>${p.name}</option>`;
@@ -915,7 +1005,6 @@
             }
         }
 
-        /* Image handling */
         let currentPhotoData = "";
 
         function previewImageUrl(url) {
@@ -946,90 +1035,133 @@
             document.getElementById('photo-preview-container').classList.add('hidden');
         }
 
-        /* Save Game Handler */
-        function handleSaveGame(event) {
+        // Guardar Partida en Supabase
+        async function handleSaveGame(event) {
             event.preventDefault();
 
-            const date = document.getElementById('game-date').value;
-            const location = document.getElementById('game-location').value || "Partida Regular";
-            const duration = document.getElementById('game-duration').value || 60;
-            const notes = document.getElementById('game-notes').value || "";
+            const submitBtn = event.target.querySelector('button[type="submit"]');
+            const originalBtnText = submitBtn.innerHTML;
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = `<i class="fa-solid fa-spinner fa-spin"></i> Guardando en Supabase...`;
 
-            // Selected expansions
-            const expCheckboxes = document.querySelectorAll('.expansion-checkbox:checked');
-            const expansions = Array.from(expCheckboxes).map(cb => cb.value);
+            try {
+                const date = document.getElementById('game-date').value;
+                const location = document.getElementById('game-location').value || "Partida Regular";
+                const duration = document.getElementById('game-duration').value || 60;
+                const notes = document.getElementById('game-notes').value || "";
 
-            // Process player rows
-            const rowElements = document.querySelectorAll('.player-input-row');
-            const results = [];
-            let maxScore = -1;
+                const expCheckboxes = document.querySelectorAll('.expansion-checkbox:checked');
+                const expansions = Array.from(expCheckboxes).map(cb => cb.value);
 
-            for (let row of rowElements) {
-                const select = row.querySelector('.player-select');
-                const newInput = row.querySelector('.new-player-name');
-                const ptsInput = row.querySelector('.player-pts');
-                const hadRoad = row.querySelector('.had-road').checked;
-                const hadArmy = row.querySelector('.had-army').checked;
+                const rowElements = document.querySelectorAll('.player-input-row');
+                const pendingResults = [];
+                let maxScore = -1;
 
-                let playerId = select.value;
-                let pts = parseInt(ptsInput.value) || 0;
+                for (let row of rowElements) {
+                    const select = row.querySelector('.player-select');
+                    const newInput = row.querySelector('.new-player-name');
+                    const ptsInput = row.querySelector('.player-pts');
+                    const hadRoad = row.querySelector('.had-road').checked;
+                    const hadArmy = row.querySelector('.had-army').checked;
 
-                if (playerId === 'NEW') {
-                    const newName = newInput.value.trim();
-                    if (!newName) {
-                        showToast("Escribe el nombre del nuevo jugador", "error");
+                    let playerId = select.value;
+                    let pts = parseInt(ptsInput.value) || 0;
+
+                    if (playerId === 'NEW') {
+                        const newName = newInput.value.trim();
+                        if (!newName) {
+                            showToast("Escribe el nombre del nuevo jugador", "error");
+                            submitBtn.disabled = false;
+                            submitBtn.innerHTML = originalBtnText;
+                            return;
+                        }
+
+                        const existingPlayer = appState.players.find(p => p.name.toLowerCase() === newName.toLowerCase());
+                        if (existingPlayer) {
+                            playerId = existingPlayer.id;
+                        } else {
+                            const { data: newP, error: pErr } = await supabaseClient
+                                .from('players')
+                                .insert([{ name: newName }])
+                                .select()
+                                .single();
+
+                            if (pErr) throw pErr;
+                            playerId = newP.id;
+                        }
+                    }
+
+                    if (!playerId) {
+                        showToast("Por favor selecciona todos los jugadores", "error");
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = originalBtnText;
                         return;
                     }
-                    // Create new player
-                    playerId = "p_" + Date.now() + Math.random().toString(36).substr(2, 3);
-                    const colors = ['bg-amber-500', 'bg-red-500', 'bg-blue-500', 'bg-emerald-500', 'bg-purple-500', 'bg-pink-500'];
-                    const randomColor = colors[Math.floor(Math.random() * colors.length)];
-                    appState.players.push({ id: playerId, name: newName, avatarColor: randomColor });
+
+                    if (pts > maxScore) maxScore = pts;
+
+                    pendingResults.push({
+                        playerId: playerId,
+                        points: pts,
+                        hadRoad: hadRoad,
+                        hadArmy: hadArmy,
+                        isWinner: false
+                    });
                 }
 
-                if (!playerId) {
-                    showToast("Por favor selecciona todos los jugadores", "error");
-                    return;
-                }
-
-                if (pts > maxScore) maxScore = pts;
-
-                results.push({
-                    playerId: playerId,
-                    points: pts,
-                    hadRoad: hadRoad,
-                    hadArmy: hadArmy,
-                    isWinner: false // Set below
+                pendingResults.forEach(r => {
+                    if (r.points === maxScore && maxScore > 0) {
+                        r.isWinner = true;
+                    }
                 });
+
+                const fullNotes = notes ? `${location} | ${notes}` : location;
+
+                // 1. Insertar la partida en 'games'
+                const { data: gameData, error: gameErr } = await supabaseClient
+                    .from('games')
+                    .insert([{
+                        played_at: date ? new Date(date).toISOString() : new Date().toISOString(),
+                        duration_minutes: parseInt(duration) || 60,
+                        expansion: expansions.length > 0 ? expansions.join(', ') : 'Juego Base',
+                        board_photo_url: currentPhotoData || null,
+                        notes: fullNotes
+                    }])
+                    .select()
+                    .single();
+
+                if (gameErr) throw gameErr;
+
+                // 2. Insertar resultados en 'game_players'
+                const playerRows = pendingResults.map(r => ({
+                    game_id: gameData.id,
+                    player_id: r.playerId,
+                    victory_points: r.points,
+                    is_winner: r.isWinner,
+                    has_longest_road: r.hadRoad,
+                    has_largest_army: r.hadArmy
+                }));
+
+                const { error: gpErr } = await supabaseClient
+                    .from('game_players')
+                    .insert(playerRows);
+
+                if (gpErr) throw gpErr;
+
+                await loadSupabaseData();
+
+                document.getElementById('game-notes').value = '';
+                document.getElementById('game-location').value = '';
+                clearImagePreview();
+                showToast("Partida registrada en Supabase exitosamente! 🎲", "success");
+                switchTab('history');
+            } catch (err) {
+                console.error("Error al guardar partida:", err);
+                showToast("Error al guardar en Supabase: " + err.message, "error");
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = originalBtnText;
             }
-
-            // Flag winner (highest score)
-            results.forEach(r => {
-                if (r.points === maxScore && maxScore > 0) {
-                    r.isWinner = true;
-                }
-            });
-
-            const newGame = {
-                id: "g_" + Date.now(),
-                date: date,
-                location: location,
-                expansions: expansions,
-                duration: Number(duration),
-                photoUrl: currentPhotoData,
-                notes: notes,
-                results: results
-            };
-
-            appState.games.unshift(newGame);
-            saveLocalStorage();
-            renderAllViews();
-
-            // Clear form
-            document.getElementById('game-notes').value = '';
-            clearImagePreview();
-            showToast("Partida registrada exitosamente! 🎲", "success");
-            switchTab('history');
         }
 
         function renderHistoryFeed() {
@@ -1056,7 +1188,6 @@
             }
 
             filteredGames.forEach(game => {
-                // Find winner name
                 const winnerResult = game.results.find(r => r.isWinner);
                 const winnerPlayer = winnerResult ? appState.players.find(p => p.id === winnerResult.playerId) : null;
                 const winnerName = winnerPlayer ? winnerPlayer.name : "Empate/Desconocido";
@@ -1078,7 +1209,6 @@
                             </div>
                         </div>
 
-                        <!-- Results List Grid -->
                         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 mb-4">
                             ${game.results.map(r => {
                                 const p = appState.players.find(pl => pl.id === r.playerId) || { name: 'Jugador', avatarColor: 'bg-slate-700' };
@@ -1100,7 +1230,6 @@
                             }).join('')}
                         </div>
 
-                        <!-- Image Preview & Notes -->
                         ${game.photoUrl || game.notes ? `
                             <div class="mt-3 pt-3 border-t border-slate-800/60 flex flex-col sm:flex-row gap-4 items-start">
                                 ${game.photoUrl ? `<img src="${game.photoUrl}" alt="Foto Partida" class="w-full sm:w-32 h-24 object-cover rounded-xl border border-slate-700">` : ''}
@@ -1135,7 +1264,6 @@
             const p1 = appState.players.find(p => p.id === p1Id);
             const p2 = appState.players.find(p => p.id === p2Id);
 
-            // Find shared games
             let sharedGamesCount = 0;
             let p1Wins = 0;
             let p2Wins = 0;
@@ -1159,7 +1287,6 @@
                 }
             });
 
-            // Set Avatars & Names
             document.getElementById('rival-p1-name').innerText = p1.name;
             document.getElementById('rival-p1-avatar').innerText = p1.name.charAt(0);
             document.getElementById('rival-p1-wins').innerText = p1Wins;
@@ -1170,7 +1297,6 @@
 
             document.getElementById('rival-total-games').innerText = sharedGamesCount;
 
-            // Render Comparative Metric Bars
             const metricsContainer = document.getElementById('rivalry-metrics-list');
             metricsContainer.innerHTML = '';
 
@@ -1205,10 +1331,7 @@
 
         function initDiceChart() {
             const ctx = document.getElementById('diceChart').getContext('2d');
-
             const numbers = [2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
-            // Theoretical probabilities out of 36
-            const theoreticalProbs = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1];
 
             diceChartInstance = new Chart(ctx, {
                 type: 'bar',
@@ -1223,7 +1346,7 @@
                         },
                         {
                             label: 'Curva Teórica (Esperada)',
-                            data: numbers.map(n => 0), // Calculated dynamically
+                            data: numbers.map(n => 0),
                             type: 'line',
                             borderColor: '#ef4444',
                             borderWidth: 2,
@@ -1263,7 +1386,7 @@
             appState.diceStats[num] += 1;
             
             document.getElementById('last-roll-display').innerText = num;
-            saveLocalStorage();
+            localStorage.setItem('catan_dice_stats', JSON.stringify(appState.diceStats));
             updateDiceUI();
         }
 
@@ -1278,7 +1401,7 @@
                 appState.diceStats[i] = 0;
             }
             document.getElementById('last-roll-display').innerText = "--";
-            saveLocalStorage();
+            localStorage.setItem('catan_dice_stats', JSON.stringify(appState.diceStats));
             updateDiceUI();
             showToast("Contadores de dados reiniciados", "info");
         }
@@ -1303,7 +1426,6 @@
             document.getElementById('total-rolls-count').innerText = total;
             document.getElementById('most-frequent-roll').innerText = mostFreqNum;
 
-            // 7s Luck Deviation
             const sevensCount = appState.diceStats[7] || 0;
             const sevensPct = total > 0 ? ((sevensCount / total) * 100).toFixed(1) : 0;
             document.getElementById('sevens-stat').innerText = `${sevensPct}%`;
@@ -1318,8 +1440,6 @@
             const theoreticalWeights = [1, 2, 3, 4, 5, 6, 5, 4, 3, 2, 1];
             
             const totalRolls = numbers.reduce((acc, n) => acc + (appState.diceStats[n] || 0), 0);
-
-            // Scale theoretical curve to total rolls
             const theoreticalData = theoreticalWeights.map(w => (totalRolls > 0 ? (w / 36) * totalRolls : w));
 
             diceChartInstance.data.datasets[0].data = numbers.map(n => appState.diceStats[n] || 0);
@@ -1334,7 +1454,6 @@
             const playerStats = computePlayerStats();
 
             achievementsList.forEach(ach => {
-                // Find players who unlocked this achievement
                 const unlockedPlayers = playerStats.filter(p => ach.check(p));
 
                 const card = document.createElement('div');
@@ -1380,14 +1499,12 @@
         function populatePlayerDropdowns() {
             const playerStats = computePlayerStats();
 
-            // History player filter
             const filterSelect = document.getElementById('filter-player');
             filterSelect.innerHTML = '<option value="ALL">Todos los Jugadores</option>';
             playerStats.forEach(p => {
                 filterSelect.innerHTML += `<option value="${p.id}">${p.name}</option>`;
             });
 
-            // Rivalry dropdowns
             const r1 = document.getElementById('rival-p1');
             const r2 = document.getElementById('rival-p2');
 
@@ -1405,7 +1522,6 @@
             }
         }
 
-        /* Helper Toast Notifications */
         function showToast(message, type = "info") {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
