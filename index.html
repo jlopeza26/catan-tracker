@@ -622,12 +622,50 @@
 
         // Achievements definition list
         const achievementsList = [
-            { id: "ach1", title: "Barón del Trigo", icon: "fa-wheat-awn", desc: "Ganar al menos 3 partidas.", check: (pStats) => pStats.wins >= 3 },
-            { id: "ach2", title: "Constructor Supremo", icon: "fa-road", desc: "Obtener la Gran Ruta Comercial en 3 partidas.", check: (pStats) => pStats.roads >= 3 },
-            { id: "ach3", title: "General de Catan", icon: "fa-shield-halved", desc: "Obtener el Gran Ejército en 3 partidas.", check: (pStats) => pStats.armies >= 3 },
-            { id: "ach4", title: "Imperio Imparable", icon: "fa-crown", desc: "Ganar una partida con 12 o más Puntos de Victoria.", check: (pStats) => pStats.maxScore >= 12 },
-            { id: "ach5", title: "Veterano de la Isla", icon: "fa-chess-board", desc: "Jugar 5 o más partidas registradas.", check: (pStats) => pStats.totalGames >= 5 },
-            { id: "ach6", title: "Doble Corona", icon: "fa-bolt", desc: "Ganar una partida ostentando tanto la Ruta como el Ejército.", check: (pStats) => pStats.doubleCrowns >= 1 }
+            // --- Logros Iniciales ---
+            { id: "ach1", title: "Barón del Trigo", icon: "fa-wheat-awn", desc: "Ganar al menos 5 partidas.", check: (pStats) => pStats.wins >= 5 },
+            { id: "ach2", title: "Constructor Supremo", icon: "fa-road", desc: "Obtener la Gran Ruta Comercial en 5 partidas.", check: (pStats) => pStats.roads >= 5 },
+            { id: "ach3", title: "General de Catan", icon: "fa-shield-halved", desc: "Obtener el Gran Ejército en 5 partidas.", check: (pStats) => pStats.armies >= 5 },
+            { id: "ach4", title: "Imperio Imparable", icon: "fa-crown", desc: "Ganar una partida con 14 o más Puntos de Victoria.", check: (pStats) => pStats.maxScore >= 14 },
+            { id: "ach5", title: "Veterano de la Isla", icon: "fa-chess-board", desc: "Jugar 10 o más partidas registradas.", check: (pStats) => pStats.totalGames >= 10 },
+            { id: "ach6", title: "Doble Corona", icon: "fa-bolt", desc: "Ganar una partida ostentando tanto la Ruta como el Ejército.", check: (pStats) => pStats.doubleCrowns >= 1 },
+
+            // --- Nuevos Logros de Progresión ---
+            { id: "ach7", title: "Dominante de Catan", icon: "fa-trophy", desc: "Alcanzar 20 victorias totales.", check: (pStats) => pStats.wins >= 20 },
+            { id: "ach8", title: "Leyenda Viviente", icon: "fa-dragon", desc: "Haber participado en 25 o más partidas.", check: (pStats) => pStats.totalGames >= 25 },
+            { id: "ach9", title: "Magnate Vial", icon: "fa-route", desc: "Obtener la Gran Ruta Comercial en 10 partidas.", check: (pStats) => pStats.roads >= 10 },
+            { id: "ach10", title: "Señor de la Guerra", icon: "fa-chess-knight", desc: "Obtener el Gran Ejército en 10 partidas.", check: (pStats) => pStats.armies >= 10 },
+
+            // --- Nuevos Logros de Desempeño y Reto ---
+            { id: "ach11", title: "Paliza Histórica", icon: "fa-fire", desc: "Ganar una partida alcanzando 18 o más Puntos de Victoria.", check: (pStats) => pStats.maxScore >= 18 },
+            { id: "ach12", title: "Efectividad Pura", icon: "fa-percent", desc: "Mantener una tasa de victorias del 50% o superior (mínimo 6 partidas).", check: (pStats) => pStats.totalGames >= 6 && (pStats.wins / pStats.totalGames) >= 0.5 },
+            { id: "ach13", title: "Coleccionista de Coronas", icon: "fa-gem", desc: "Lograr la 'Doble Corona' (Ruta + Ejército) en 5 partidas distintas.", check: (pStats) => pStats.doubleCrowns >= 5 },
+            { id: "ach14", title: "Consistencia Implacable", icon: "fa-award", desc: "Obtener al menos un trofeo (Ruta o Ejército) en 10 partidas.", check: (pStats) => (pStats.roads + pStats.armies) >= 10 },
+        
+            {
+                id: "ach15", title: "Purista Territorial", icon: "fa-campground", desc: "Ganar una partida sin obtener la Gran Ruta ni el Gran Ejército.",
+                check: (pStats) => (pStats.winsPure || 0) >= 1
+            },
+            {
+                id: "ach16", title: "Monarquía Absoluta", icon: "fa-crown", desc: "Ganar una partida aventajando por 4 o más puntos al segundo lugar.",
+                check: (pStats) => (pStats.maxWinMargin || 0) >= 4
+            },
+            {
+                id: "ach17", title: "Imparable", icon: "fa-fire", desc: "Lograr una racha de 3 victorias consecutivas en la liga.",
+                check: (pStats) => (pStats.maxWinStreak || 0) >= 3
+            },
+            {
+                id: "ach18", title: "La Bestia Negra", icon: "fa-user-ninja", desc: "Ganar 3 partidas consecutivas contra un mismo rival.",
+                check: (pStats) => (pStats.maxRivalStreak || 0) >= 3
+            },
+            {
+                id: "ach19", title: "Rey de Mesa Llena", icon: "fa-users", desc: "Ganar 5 partidas registradas de 4 jugadores.",
+                check: (pStats) => (pStats.wins4p || 0) >= 5
+            },
+            {
+                id: "ach20", title: "Eterno Subcampeón", icon: "fa-medal", desc: "Quedar en 2.ª posición a menos de 2 puntos del ganador en 3 partidas distintas.",
+                check: (pStats) => (pStats.closeRunnerUp || 0) >= 3
+            }
         ];
 
         // Global State
@@ -791,6 +829,7 @@
         function computePlayerStats() {
             const stats = {};
 
+            // Inicializar la estructura para cada jugador conocido
             appState.players.forEach(p => {
                 stats[p.id] = {
                     id: p.id,
@@ -802,29 +841,107 @@
                     roads: 0,
                     armies: 0,
                     maxScore: 0,
-                    doubleCrowns: 0
+                    doubleCrowns: 0,
+                    winsPure: 0,          // Victorias sin Ruta ni Ejército
+                    maxWinMargin: 0,      // Mayor diferencia de puntos con el 2° al ganar
+                    maxWinStreak: 0,      // Mayor racha de victorias seguidas
+                    wins4p: 0,            // Victorias en partidas de 4 jugadores
+                    closeRunnerUp: 0,     // Veces en 2.º lugar a <2 pts del 1.º
+                    maxRivalStreak: 0     // Racha de victorias consecutivas sobre un mismo rival
                 };
             });
 
-            appState.games.forEach(g => {
+            // Variables auxiliares para cálculo de rachas
+            const winStreaks = {};
+            const rivalStreaks = {}; // { playerId: { rivalId: streak } }
+
+            // Procesar partidas cronológicamente (de más antigua a más reciente)
+            const sortedGames = [...appState.games].sort((a, b) => new Date(a.date) - new Date(b.date));
+
+            sortedGames.forEach(g => {
+                if (!g.results || g.results.length === 0) return;
+
+                // Asegurar existencia de jugadores en 'stats'
                 g.results.forEach(r => {
                     if (!stats[r.playerId]) {
+                        const foundP = appState.players.find(p => p.id === r.playerId);
                         stats[r.playerId] = {
                             id: r.playerId,
-                            name: "Jugador " + r.playerId,
-                            avatarColor: 'bg-amber-500',
-                            totalGames: 0, wins: 0, totalPoints: 0, roads: 0, armies: 0, maxScore: 0, doubleCrowns: 0
+                            name: foundP ? foundP.name : ("Jugador " + r.playerId),
+                            avatarColor: (foundP && foundP.avatarColor) ? foundP.avatarColor : 'bg-amber-500',
+                            totalGames: 0, wins: 0, totalPoints: 0, roads: 0, armies: 0,
+                            maxScore: 0, doubleCrowns: 0, winsPure: 0, maxWinMargin: 0,
+                            maxWinStreak: 0, wins4p: 0, closeRunnerUp: 0, maxRivalStreak: 0
                         };
                     }
+                });
 
+                // Ordenar resultados de la partida por puntos
+                const sortedResults = [...g.results].sort((a, b) => Number(b.points) - Number(a.points));
+                const winnerResult = sortedResults[0];
+
+                sortedResults.forEach((r, rank) => {
                     const ps = stats[r.playerId];
                     ps.totalGames += 1;
                     ps.totalPoints += Number(r.points || 0);
-                    if (r.isWinner) ps.wins += 1;
+                    if (Number(r.points) > ps.maxScore) ps.maxScore = Number(r.points);
                     if (r.hadRoad) ps.roads += 1;
                     if (r.hadArmy) ps.armies += 1;
                     if (r.hadRoad && r.hadArmy && r.isWinner) ps.doubleCrowns += 1;
-                    if (Number(r.points) > ps.maxScore) ps.maxScore = Number(r.points);
+
+                    if (!winStreaks[r.playerId]) winStreaks[r.playerId] = 0;
+                    if (!rivalStreaks[r.playerId]) rivalStreaks[r.playerId] = {};
+
+                    if (r.isWinner) {
+                        ps.wins += 1;
+                        
+                        // Racha de victorias
+                        winStreaks[r.playerId] += 1;
+                        ps.maxWinStreak = Math.max(ps.maxWinStreak, winStreaks[r.playerId]);
+
+                        // Margen de victoria sobre el 2.º lugar
+                        if (sortedResults[1]) {
+                            const margin = Number(r.points) - Number(sortedResults[1].points);
+                            ps.maxWinMargin = Math.max(ps.maxWinMargin, margin);
+                        }
+
+                        // Victoria pura (sin ruta ni ejército)
+                        if (!r.hadRoad && !r.hadArmy) {
+                            ps.winsPure += 1;
+                        }
+
+                        // Victoria en mesa de 4 jugadores
+                        if (g.results.length === 4) {
+                            ps.wins4p += 1;
+                        }
+
+                        // Rachas contra rivales en la misma partida
+                        sortedResults.forEach(other => {
+                            if (other.playerId !== r.playerId) {
+                                rivalStreaks[r.playerId][other.playerId] = (rivalStreaks[r.playerId][other.playerId] || 0) + 1;
+                                ps.maxRivalStreak = Math.max(ps.maxRivalStreak, rivalStreaks[r.playerId][other.playerId]);
+                            }
+                        });
+
+                    } else {
+                        // Reiniciar racha de victorias al perder
+                        winStreaks[r.playerId] = 0;
+
+                        // Reiniciar rachas contra rivales
+                        sortedResults.forEach(other => {
+                            if (other.playerId !== r.playerId) {
+                                rivalStreaks[r.playerId][other.playerId] = 0;
+                            }
+                        });
+
+                        // Subcampeón cercano (2.º puesto a menos de 2 puntos del ganador)
+                        if (rank === 1 && winnerResult) {
+                            const diff = Number(winnerResult.points) - Number(r.points);
+                            if (diff < 2) {
+                                ps.closeRunnerUp += 1;
+                            }
+                        }
+                    }
                 });
             });
 
